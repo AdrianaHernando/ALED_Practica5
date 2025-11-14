@@ -92,9 +92,9 @@ public class EmergencyRoom {
 				int x = in.nextInt();
 				int y = in.nextInt();
 				int time = in.nextInt();
-				int capacity = in.nextInt();
+				int capacity = in.nextInt(); //MODIFICACION RESPECTO PRACTICA 4: define capacidad del area
 				String name = in.next().trim();
-				Area area = new Area(name, time, capacity, new Position2D(x, y));
+				Area area = new Area(name, time, capacity, new Position2D(x, y)); //MODIFICADO
 				// Assign a random-ish color for visualization
 				area.setColor(Color.getHSBColor(rand.nextFloat(), 0.3f, 0.9f));
 				areas.put(name, area);

@@ -40,8 +40,16 @@ public class Area {
 	 * @param position The location of the Area in the GUI.
 	 */
 	public Area(String name, int time, int capacity, Position2D position) {
-		// TODO
+		// HECHO
+		this.name = name;
+		this.time = time;
+		this.position = position;
 		this.color = Color.GRAY; // Default color
+		this.capacity = capacity;
+		//Al crear un nuevo Area los pacientes siendo atendidos y esperando son cero
+		this.numPatients = 0;
+		this.waiting = 0;
+		
 	}
 
 	/**
@@ -96,7 +104,23 @@ public class Area {
 	 * 
 	 * @param p The patient that wants to enter.
 	 */
-	// TODO: method enter
+	// TODO: method enter : HECHO
+	public synchronized void enter (Patient p) {
+		try {
+			//Si el Area está llena el paciente debe esperar
+			while (this.numPatients == this.capacity) {
+				System.out.println("Patient " + p.getNumber() + " is waiting to be attended.");
+				this.waiting ++; //incremento en 1 el numero de pacientes que estan esperando
+				wait(); //hago que el paciente espere 	
+			}
+			//Cuando no se cumpla, numPatients < capacity, el paciente podrá entrar
+			this.numPatients ++; //incremento en 1 el numero de pacientes que están siendo atendidos (ha entrado un paciente)
+			if (waiting > 0) {
+				this.waiting --;  
+			}	
+		}catch (InterruptedException e) {
+		}
+	}
 	
 	/**
 	 * Thread safe method that allows a Patient to exit the area. After the Patient
@@ -104,28 +128,41 @@ public class Area {
 	 * 
 	 * @param p The patient that wants to enter.
 	 */
-	// TODO method exit
-	
+	// TODO method exit : HECHO
+	public synchronized void exit (Patient p) { //EN ESTE CUANDO EL PACIENTE SALE: notifyALL()
+		this.numPatients --; //reduzco en 1 el numero de pacientes que están siendo atendidos
+		System.out.println("Patient" + p.getNumber() + " has exited.");
+		notifyAll(); //despierto a todas las hebras de Patients que estaban esperando
+	}
 	/**
-	 * Returns the capacity of the Area. This method must be thread safe.
+	 * Returns the capacity of the Area. This method must be thread safe.//Ser THREAD SAVE implica que
+	 * nos aseguremos de que si van a usarlo diferentes threads no "pete". En el caso de getCapacity, como
+	 * solamente se va a leer siempre, no hace falta poner synchronized para que sea thread save.
 	 * 
 	 * @return The capacity.
 	 */
-	// TODO: method getCapacity
-	
+	// TODO: method getCapacity : HECHO
+	public int getCapacity() {
+		return this.capacity;
+	}
 	/**
 	 * Returns the current number of Patients being treated at the Area. This method must be thread safe.
 	 * 
 	 * @return The number of Patients being treated.
 	 */
-	// TODO: method getNumPatients
-
+	// TODO: method getNumPatients : HECHO
+	public synchronized int getNumPatients() {
+		return this.numPatients;
+	}
 	/**
 	 * Returns the current number of Patients waiting to be treated at the Area. This method must be thread safe.
 	 * 
 	 * @return The number of Patients waiting to be treated.
 	 */
-	// TODO method getWaiting
+	// TODO method getWaiting : HECHO
+	public synchronized int getWaiting() {
+		return this.waiting;
+	}
 
 	@Override
 	public int hashCode() {
