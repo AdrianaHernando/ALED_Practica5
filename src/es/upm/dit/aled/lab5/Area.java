@@ -104,7 +104,7 @@ public class Area {
 	 * 
 	 * @param p The patient that wants to enter.
 	 */
-	// TODO: method enter : HECHO
+	//method enter : HECHO
 	public synchronized void enter (Patient p) {
 		try {
 			//Si el Area está llena el paciente debe esperar
@@ -128,20 +128,21 @@ public class Area {
 	 * 
 	 * @param p The patient that wants to enter.
 	 */
-	// TODO method exit : HECHO
+	//method exit : HECHO
 	public synchronized void exit (Patient p) { //EN ESTE CUANDO EL PACIENTE SALE: notifyALL()
 		this.numPatients --; //reduzco en 1 el numero de pacientes que están siendo atendidos
 		System.out.println("Patient" + p.getNumber() + " has exited.");
 		notifyAll(); //despierto a todas las hebras de Patients que estaban esperando
 	}
 	/**
-	 * Returns the capacity of the Area. This method must be thread safe.//Ser THREAD SAVE implica que
+	 * Returns the capacity of the Area. This method must be thread safe.
+	 * //Ser THREAD SAVE implica que:
 	 * nos aseguremos de que si van a usarlo diferentes threads no "pete". En el caso de getCapacity, como
 	 * solamente se va a leer siempre, no hace falta poner synchronized para que sea thread save.
 	 * 
 	 * @return The capacity.
 	 */
-	// TODO: method getCapacity : HECHO
+	//method getCapacity : HECHO
 	public int getCapacity() {
 		return this.capacity;
 	}
@@ -150,7 +151,7 @@ public class Area {
 	 * 
 	 * @return The number of Patients being treated.
 	 */
-	// TODO: method getNumPatients : HECHO
+	//method getNumPatients : HECHO
 	public synchronized int getNumPatients() {
 		return this.numPatients;
 	}
@@ -159,7 +160,7 @@ public class Area {
 	 * 
 	 * @return The number of Patients waiting to be treated.
 	 */
-	// TODO method getWaiting : HECHO
+	//method getWaiting : HECHO
 	public synchronized int getWaiting() {
 		return this.waiting;
 	}
