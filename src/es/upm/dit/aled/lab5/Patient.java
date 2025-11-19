@@ -164,7 +164,7 @@ public class Patient extends Thread {
 	 */
 	@Override
 	public void run() {
-		// TODO : HECHO
+		//HECHO
 		while (indexProtocol < protocol.size()) {
 			this.location.enter(this); //intentar acceder al área actual de su protocolo
 			attendedAtLocation(); //es atendido en el área actual
