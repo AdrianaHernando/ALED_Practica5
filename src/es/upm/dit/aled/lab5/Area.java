@@ -106,19 +106,21 @@ public class Area {
 	 */
 	//method enter : HECHO
 	public synchronized void enter (Patient p) {
+		System.out.println("Patient " + p.getNumber() + " trying to enter " + this.name);
 		try {
+			this.waiting ++; //incremento en 1 el numero de pacientes que estan esperando
 			//Si el Area está llena el paciente debe esperar
 			while (this.numPatients == this.capacity) {
-				System.out.println("Patient " + p.getNumber() + " is waiting to be attended.");
-				this.waiting ++; //incremento en 1 el numero de pacientes que estan esperando
+				System.out.println("Patient " + p.getNumber() + " is waiting for being attended in " +this.name);
 				wait(); //hago que el paciente espere 	
 			}
 			//Cuando no se cumpla, numPatients < capacity, el paciente podrá entrar
 			this.numPatients ++; //incremento en 1 el numero de pacientes que están siendo atendidos (ha entrado un paciente)
-			if (waiting > 0) {
-				this.waiting --;  
-			}	
+			this.waiting --;
+			System.out.println("Patient " + p.getNumber() + " has entered in " + this.name);
 		}catch (InterruptedException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt(); //IMP DIFERENCIA del profe: Restore interrupted status
 		}
 	}
 	

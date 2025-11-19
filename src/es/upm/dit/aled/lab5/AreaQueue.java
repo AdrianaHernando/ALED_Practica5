@@ -29,23 +29,24 @@ public class AreaQueue extends Area {
 	 */
 	@Override
 	public synchronized void enter (Patient p) {
+		System.out.println("Patient " + p.getNumber() + " trying to enter " + this.name);
 		try {
+			this.waiting ++; //incremento en 1 el numero de pacientes que estan esperando
+			this.waitQueue.add(p); //Añado el paciente al final de la cola: IMPORTANTE HACERLO ANTES DEL WHILE
+			
 			//Si el Area está llena O no es el primer paciente de la cola: el paciente debe esperar
 			while (this.numPatients == this.capacity || p != this.waitQueue.peek()) {
 				System.out.println("Patient " + p.getNumber() + " is waiting to be attended.");
-				this.waiting ++; //incremento en 1 el numero de pacientes que estan esperando
-				if (!this.waitQueue.contains(p)) { //Si el paciente NO estaba en la cola lo añado al final
-					this.waitQueue.add(p);
-				}
 				wait(); //hago que el paciente espere 	
 			}
 			//Cuando no se cumpla ninguna de las condiciones, el paciente podrá entrar
 			this.numPatients ++; //incremento en 1 el numero de pacientes que están siendo atendidos (ha entrado un paciente)
-			if (waiting > 0) {
-				this.waiting --;  
-			}
-			this.waitQueue.remove(p); //Elimina al paciente de la cola de espera.
+			this.waiting --;  	
+			this.waitQueue.remove(); //Elimina al paciente de la cola de espera.
+			System.out.println("Patient " + p.getNumber() + " has entered in " + this.name);
 		}catch (InterruptedException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt(); //IMP DIFERENCIA del profe: Restore interrupted status
 		}
 	}
 	
